@@ -1,0 +1,12 @@
+/* CSS declarations go here */
+.btn-width-1 {
+    width: 100%;
+    max-width: 100px;
+    vertical-align: center;
+}
+.btn-width-2 {
+    vertical-align: middle;
+}
+.task-desc {
+    width: 100%;
+}
