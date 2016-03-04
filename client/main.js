@@ -1,9 +1,15 @@
+// accounts
+Accounts.ui.config({
+  passwordSignupFields : "USERNAME_AND_EMAIL"
+})
+
 // counter starts at 0
 Session.setDefault('counter', 0);
 
 Template.taskstodo.helpers({
   tasks: function(){
-    return Tasks.find({"done": false}, {sort: {createdOn: -1}});
+    user = Meteor.user();
+    return Tasks.find({"done": false, "createdBy": user._id}, {sort: {createdOn: -1}});
   }
 });
 
@@ -28,14 +34,18 @@ Template.taskadd.events({
     Tasks.insert({
       "description": event.target.task_description.value, 
       "done": false,
-      "createdOn": new Date()
+      "createdOn": new Date(),
+      "createdBy": Meteor.user()._id
     });
+    event.target.task_description.value = null;
+    return false;
   }
 });
 
 Template.tasksdone.helpers({
   tasks: function(){
-    return Tasks.find({"done": true}, {sort: {createdOn: -1}});
+    user = Meteor.user();
+    return Tasks.find({"done": true, "createdBy": user._id}, {sort: {createdOn: -1}});
   }
 });
 
