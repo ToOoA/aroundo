@@ -3,6 +3,10 @@ Accounts.ui.config({
   passwordSignupFields : "USERNAME_AND_EMAIL"
 })
 
+// subscriptions
+Meteor.subscribe("user-tasks");
+
+
 // counter starts at 0
 Session.setDefault('counter', 0);
 
