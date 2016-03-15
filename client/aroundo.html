@@ -3,13 +3,12 @@
 </head>
 
 <body>
-    {{> navbar}}
-
-    {{> taskadd}}
-    {{> taskstodo}}
-    {{> tasksdone}}
-
 </body>
+
+<template name="ApplicationLayout">
+    {{>yield "navbar"}}
+    {{>yield "content"}}
+</template>
 
 <template name="navbar">
     <nav class="navbar navbar-default">
@@ -32,6 +31,12 @@
             </div>
         </div>
     </nav>    
+</template>
+
+<template name="tasks">
+    {{>taskadd}}
+    {{>taskstodo}}
+    {{>tasksdone}}
 </template>
 
 <template name="taskadd">

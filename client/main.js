@@ -4,7 +4,8 @@ Accounts.ui.config({
 })
 
 // subscriptions
-Meteor.subscribe("user-tasks");
+Meteor.subscribe("user-tasks-todo");
+Meteor.subscribe("user-tasks-done");
 
 
 // counter starts at 0
