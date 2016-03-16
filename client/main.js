@@ -14,7 +14,7 @@ Session.setDefault('counter', 0);
 Template.taskstodo.helpers({
   tasks: function(){
     user = Meteor.user();
-    return Tasks.find({"done": false, "createdBy": user._id}, {sort: {createdOn: -1}});
+    return Tasks.find({"status": "todo", "createdBy": user._id}, {sort: {createdOn: -1}});
   }
 });
 
@@ -22,7 +22,7 @@ Template.taskstodo.events({
   'click .js-task-done': function(event){
     task_id = this._id;
     $("#" + task_id).toggle("slow");
-    Meteor.setTimeout(function(){updateTaskStatus(task_id, true)}, 500);
+    Meteor.setTimeout(function(){updateTaskStatus(task_id, "done")}, 500);
   },
   'click .js-task-delete': function(event){
     deleteTask(this._id)
@@ -30,7 +30,7 @@ Template.taskstodo.events({
 });
 
 function deleteTask(id){
-  Tasks.remove({"_id": id});
+  Tasks.update({"_id": id}, {$set: {"status": "deleted"}});
 }
 
 Template.taskadd.events({
@@ -38,7 +38,7 @@ Template.taskadd.events({
     console.log(event);
     Tasks.insert({
       "description": event.target.task_description.value, 
-      "done": false,
+      "status": "todo",
       "createdOn": new Date(),
       "createdBy": Meteor.user()._id
     });
@@ -50,7 +50,7 @@ Template.taskadd.events({
 Template.tasksdone.helpers({
   tasks: function(){
     user = Meteor.user();
-    return Tasks.find({"done": true, "createdBy": user._id}, {sort: {createdOn: -1}});
+    return Tasks.find({"status": "done", "createdBy": user._id}, {sort: {createdOn: -1}});
   }
 });
 
@@ -58,17 +58,16 @@ Template.tasksdone.events({
   'click .js-task-undo': function(event){
     task_id = this._id;
     $("#" + task_id).toggle("slow");
-    Meteor.setTimeout(function(){updateTaskStatus(task_id, false)}, 500);
+    Meteor.setTimeout(function(){updateTaskStatus(task_id, "todo")}, 500);
   },
   'click .js-task-delete': function(event){
     task_id = this._id;
     $("#" + task_id).toggle("slow");
-    Meteor.setTimeout(function(){deleteTask(this._id)}, 500);
+    Meteor.setTimeout(function(){deleteTask(task_id)}, 500);
   }
 });
 
 
-
 function updateTaskStatus(id, status){
-  Tasks.update({"_id": id}, {$set: {"done": status}});
+  Tasks.update({"_id": id}, {$set: {"status": status}});
 }
